@@ -5,7 +5,7 @@ var controller = require('../bot/index');
 describe('Messsaging', function() {
 
 	before(function() {
-		controller.spawn(config.tokens).startRTM();
+		controller.spawn(config.authentication).startRTM();
 	});
 
 	it('should say hi when you say hi', function() {

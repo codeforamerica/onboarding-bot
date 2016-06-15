@@ -5,7 +5,7 @@ var setup = process.env.DEV ? config.settings.dev : config.settings.prod;
 
 var controller = Botkit.slackbot(setup);
 
-controller.spawn(config.tokens).startRTM();
+controller.spawn(config.authentication).startRTM();
 
 // Set-up handler for bot's direct messaging response
 controller.on('direct_message', function(bot, message) {

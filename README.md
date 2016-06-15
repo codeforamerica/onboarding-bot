@@ -23,7 +23,7 @@ Create a `config.json` file in the root of the project folder, and populate it w
       "debug": "false"
     }
   },
-  "tokens": {
+  "authentication": {
     "token": "REPLACE_THIS_WITH_SLACK_API_TOKEN"
   }
 }
