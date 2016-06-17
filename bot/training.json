@@ -1,9 +1,9 @@
 {
   "member_start": [
-    "lets get @chris onboarded",
+    "Lets get @chris onboarded",
     "@sam starts tomorrow.",
-    "lets get @netdot started tomorrow with new stuff",
-    "begin @lilyjoh's new hire orientation stuff"
+    "Lets get @netdot started tomorrow with new stuff",
+    "Begin @lilyjoh's new hire orientation stuff"
   ],
   "member_info": [
     "What does @tmaybe have left for onboarding?",
@@ -14,9 +14,36 @@
     "Can I ask what I have left for onboarding?"
   ],
   "member_edit": [
-    "Can you add a 3 O'Clock meeting in Pahlkahaus for @james onboarding.",
-    "Add a finance meeting tomorrow morning with the @nanb and @bgolder.",
+    "Can you add a 3 O'Clock meeting in Pahlkahaus for @mikekafka onboarding.",
+    "Add a finance meeting tomorrow morning with @nanb and @bgolder.",
     "Can me and @tomas get coffee tomorrow morning?",
-    "Can we try to get a lunch with the @rollings on Friday?"
+    "Can we try to get a lunch with @jkrollings and @jrrmarten on noon Friday?"
+  ],
+  "resources_info": [
+    "Where is that file with the staff contact information?",
+    "Can I get that excel file with Q1 metrics?",
+    "Give me the Word doc with our mission statement.",
+    "I'd like to see our 2015 fellows program report",
+    "Where can I get information about the origin story of Code for America",
+    ""
+  ],
+  "personnel_info": [
+    "Who is the founder of Code for America?",
+    "Who is @jenny?",
+    "Who is @monica?",
+    "Who is Edmund?",
+    "Who is Dan Lopez? I think he is a consultant for us. Am I right?",
+    "Who were the 2015 fellows?",
+    "Who is our bridgade program manager?",
+    "Who is the head of HR?",
+    "Who do I contact for payroll stuff?",
+    "Who can I talk to about the referral process?"
+  ],
+  "quiet_mode": [
+    "Please leave me alone",
+    "No more notifications please",
+    "I'm so tired",
+    "Can you stop?",
+    "Ok fin"
   ]
 }

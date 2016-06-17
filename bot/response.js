@@ -2,6 +2,9 @@ var natural = require('natural');
 var member_start = require('./handlers/member_start');
 var member_info = require('./handlers/member_info');
 var member_edit = require('./handlers/member_edit');
+var resources_info = require('./handlers/resources_info');
+var personnel_info = require('./handlers/personnel_info');
+var quiet_mode = require('./handlers/quiet_mode');
 
 // Text to train Bayesian classifier on
 var training = require('./training.json');
@@ -29,6 +32,15 @@ module.exports = function(text, cb) {
       break;
     case 'member_edit':
       cb(member_edit(text));
+      break;
+    case 'resources_info':
+      cb(resources_info(text));
+      break;
+    case 'personnel_info':
+      cb(personnel_info(text));
+      break;
+    case 'quiet_mode':
+      cb(quiet_mode(text));
       break;
     default:
       cb('I don\'t understand that 😕');
