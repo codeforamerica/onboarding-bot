@@ -29,4 +29,4 @@ Create a `config.json` file in the root of the project folder, and populate it w
 }
 ```
 
-The bot uses some natural language processing to enable conversation interaction. The sample text its trained upon exists in `bot/training.json`. The keys e.g. `member_info` hook into functionality specified in `bot/handlers` directory. 
+The bot uses some natural language processing to enable conversation interaction. The sample text its trained upon exists in `bot/training.json`. The keys e.g. `member_info` hook into functionality specified in `bot/handlers/` directory and `bot/response.js` file. 
