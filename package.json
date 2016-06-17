@@ -4,7 +4,7 @@
   "description": "Brief new employees about onboarding activities via Slack",
   "main": "bot/index.js",
   "scripts": {
-    "start": "node bot/index.js",
+    "start": "node bot/bot.js",
     "test": "mocha",
     "test:watch": "npm run test -- -w"
   },
@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "botkit": "^0.2.0",
+    "chrono-node": "^1.2.3",
     "natural": "^0.4.0"
   }
 }
