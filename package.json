@@ -4,7 +4,11 @@
   "description": "Brief new employees about onboarding activities via Slack",
   "main": "bot/index.js",
   "scripts": {
-    "start": "node bot/bot.js",
+    "start": "env DEV=true node bot/bot.js",
+    "start:prod": "env DEV=false node bot/bot.js",
+    "setupdb": "createdb onboarding && psql -d onboarding -f scaffold.sql",
+    "resetdb": "dropdb onboarding && npm run setupdb",
+    "dropdb": "dropdb onboarding",
     "test": "mocha",
     "test:watch": "npm run test -- -w"
   },
@@ -29,6 +33,8 @@
   "dependencies": {
     "botkit": "^0.2.0",
     "chrono-node": "^1.2.3",
-    "natural": "^0.4.0"
+    "natural": "^0.4.0",
+    "pg": "^5.1.0",
+    "pg-native": "^1.10.0"
   }
 }
