@@ -5,7 +5,7 @@ var config;
 try {
   config = require('../config.json');
 } catch (e) {
-  config = {"settings":{"prod":{"debug":"false","db":process.env.DATABASE_URL}},"authentication":{"token":process.env.SLACK}};
+  config = {"settings":{"prod":{"debug":"false","db":process.env.DATABASE_URL},"dev":{"debug":"false","db":process.env.DATABASE_URL}},"authentication":{"token":process.env.SLACK}};
 }
 var queryDB = require('./query.js');
 var connectionString = process.env.DEV ? config.settings.dev.db : config.settings.prod.db;
