@@ -32,8 +32,11 @@ Create a `config.json` file in the root of the project folder, and populate it w
 Set up your database by making sure you have `postgres` (9.5.x) installed on your machine. Once you have Postgres installed, run `npm run setupdb`. If you'd like to delete or reset the onboarding-bot's database, run `npm run dropdb` or `npm run resetdb` respectively. Suffix `:prod` to these commands to do their equivalent for your production database, provided your have the a Heroku instance setup, the [Heroku CLI](https://toolbelt.heroku.com/) installed as well as a PostgresDB add-on configured.
 
 > Also, if you want to use Heroku as your production environment, you should set-up up two all-caps config vars:
-> 1. `SLACK` (your Slack API token)
+>
+> 1. `SLACK` (set to your Slack API token)
+>
 > 2. `DEV` (set to `false`)
+>
 > The `DATABASE_URL` config var will be set up for you when you set-up the PostgresDB add-on
 
 The bot uses some natural language processing to enable conversational interaction. The sample text its trained upon exists in `bot/training.json`. The keys e.g. `member_info` hook into functionality specified in `bot/handlers/` directory and `bot/response.js` file.
