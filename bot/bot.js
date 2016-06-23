@@ -15,6 +15,11 @@ var setup = process.env.DEV ? config.settings.dev : config.settings.prod;
 var controller = Botkit.slackbot(setup);
 controller.spawn(config.authentication).startRTM();
 
+// Setup our express server, for later front-end interface
+var express = require('express');
+var server = express();
+var port = process.env.PORT || 8000;
+
 // Connect to our Postges database
 pg.connect(connectionString, function(err, client) {
     if (err) console.warn('ERROR 🚫:\n', err);
@@ -39,6 +44,14 @@ pg.connect(connectionString, function(err, client) {
       botResponse(message.text, client, function (text) {
         bot.reply(message, text);
       });
+    });
+
+    server.get('/', function (req, res) {
+      res.send('Welcome to the Code for America\'s onboarding-bot 🚢');
+    });
+
+    server.listen(port, function () {
+      console.log('Listening on port 80');
     });
 
     // Export for testing
