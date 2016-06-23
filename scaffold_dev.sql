@@ -1,7 +1,7 @@
 CREATE TABLE members (
   member_id serial NOT NULL,
-  member_name varchar(140) NOT NULL,
-  member_descript varchar(140) NOT NULL,
+  member_name varchar(255) NOT NULL,
+  member_descript varchar(255) NOT NULL,
   last_message_id int NOT NULL
 );
 
@@ -18,12 +18,12 @@ INSERT INTO members (member_id,member_name,member_descript,last_message_id) VALU
 
 CREATE TABLE messages (
   msg_id serial NOT NULL,
-  msg_text varchar(140) NOT NULL,
+  msg_text varchar(255) NOT NULL,
   receiver_id int NOT NULL,
-  receiver_name varchar(140) NOT NULL,
-  time_to_post varchar(140) NOT NULL,
+  receiver_name varchar(255) NOT NULL,
+  time_to_post varchar(255) NOT NULL,
   sender_id int NOT NULL,
-  sender_name varchar(140) NOT NULL
+  sender_name varchar(255) NOT NULL
 );
 
 INSERT INTO messages (msg_id,msg_text,receiver_id,receiver_name,time_to_post,sender_id,sender_name) VALUES (1,'Donec est mauris, rhoncus id, mollis nec, cursus a, enim. Suspendisse aliquet, sem ut cursus',31,'Gage','2016-07-13 02:35:48',16,'Alana'),(2,'mi lorem, vehicula et, rutrum eu, ultrices sit amet, risus. Donec nibh enim, gravida sit',47,'Joelle','2017-04-04 05:59:58',28,'Deirdre'),(3,'Cras vulputate velit eu sem. Pellentesque ut ipsum ac mi eleifend egestas. Sed pharetra, felis',22,'Jerry','2016-08-12 22:34:52',59,'Dana'),(4,'Etiam gravida molestie arcu. Sed eu nibh vulputate mauris sagittis placerat. Cras dictum ultricies ligula.',58,'Yael','2016-05-10 00:24:21',44,'Solomon'),(5,'varius orci, in consequat enim diam vel arcu. Curabitur ut odio vel est tempor bibendum.',50,'Carla','2017-01-19 09:26:15',45,'Lars'),(6,'enim, condimentum eget, volutpat ornare, facilisis eget, ipsum. Donec sollicitudin adipiscing ligula. Aenean gravida nunc',35,'Meghan','2017-01-11 17:28:29',23,'Kareem'),(7,'erat volutpat. Nulla facilisis. Suspendisse commodo tincidunt nibh. Phasellus nulla. Integer vulputate, risus a ultricies',5,'Olympia','2016-09-07 01:21:40',31,'Troy'),(8,'magnis dis parturient montes, nascetur ridiculus mus. Aenean eget magna. Suspendisse tristique neque venenatis lacus.',9,'Janna','2017-06-04 12:27:45',3,'Lee'),(9,'interdum. Curabitur dictum. Phasellus in felis. Nulla tempor augue ac ipsum. Phasellus vitae mauris sit',50,'Kelsie','2015-10-07 01:04:01',57,'Chastity'),(10,'Aliquam nec enim. Nunc ut erat. Sed nunc est, mollis non, cursus non, egestas a,',49,'Josiah','2016-03-17 14:02:04',50,'Kenneth');
@@ -39,9 +39,9 @@ INSERT INTO messages (msg_id,msg_text,receiver_id,receiver_name,time_to_post,sen
 
 CREATE TABLE resources (
   resource_id serial NOT NULL,
-  resource_title varchar(140) NOT NULL,
-  resource_keywords varchar(140) NOT NULL,
-  resource_link varchar(140) NOT NULL
+  resource_title varchar(255) NOT NULL,
+  resource_keywords varchar(255) NOT NULL,
+  resource_link varchar(255) NOT NULL
 );
 
 INSERT INTO resources (resource_id,resource_title,resource_keywords,resource_link) VALUES (1,'dui. Fusce aliquam, enim nec','nibh lacinia orci, consectetuer euismod est arcu ac orci. Ut semper pretium neque. Morbi quis','tempus mauris'),(2,'et, rutrum eu, ultrices sit','tincidunt, nunc ac mattis ornare, lectus ante dictum mi, ac mattis velit justo nec ante.','id sapien.'),(3,'est ac facilisis facilisis, magna','Nulla interdum. Curabitur dictum. Phasellus in felis. Nulla tempor augue ac ipsum. Phasellus vitae mauris','nec urna'),(4,'eu arcu. Morbi sit amet','non, luctus sit amet, faucibus ut, nulla. Cras eu tellus eu augue porttitor interdum. Sed','Duis gravida.'),(5,'libero. Proin sed turpis nec','tellus justo sit amet nulla. Donec non justo. Proin non massa non ante bibendum ullamcorper.','purus sapien,'),(6,'urna. Nullam lobortis quam a','neque. Morbi quis urna. Nunc quis arcu vel quam dignissim pharetra. Nam ac nulla. In','libero est,'),(7,'arcu. Nunc mauris. Morbi non','et ipsum cursus vestibulum. Mauris magna. Duis dignissim tempor arcu. Vestibulum ut eros non enim','adipiscing lacus.'),(8,'ac nulla. In tincidunt congue','placerat eget, venenatis a, magna. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Etiam laoreet,','sagittis lobortis'),(9,'mattis ornare, lectus ante dictum','ante bibendum ullamcorper. Duis cursus, diam at pretium aliquet, metus urna convallis erat, eget tincidunt','in, cursus'),(10,'est ac mattis semper, dui','Donec tempor, est ac mattis semper, dui lectus rutrum urna, nec luctus felis purus ac','mauris. Morbi');

@@ -5,10 +5,13 @@
   "main": "bot/index.js",
   "scripts": {
     "start": "env DEV=true node bot/bot.js",
-    "start:prod": "env DEV=false node bot/bot.js",
-    "setupdb": "createdb onboarding && psql -d onboarding -f scaffold.sql",
-    "resetdb": "dropdb onboarding && npm run setupdb",
+    "start:prod": "env DEV=prod node bot/bot.js",
+    "setupdb": "createdb onboarding && psql -d onboarding -f scaffold_dev.sql",
+    "setupdb:prod": "heroku pg:psql --app onboarding-bot-cfa < scaffold_prod.sql",
     "dropdb": "dropdb onboarding",
+    "dropdb:prod": "heroku pg:psql --app onboarding-bot-cfa -c \"DROP TABLE members, messages, resources;\"",
+    "resetdb": "npm run dropdb && npm run setupdb",
+    "resetdb:prod": "npm run dropdb:prod && npm run setupdb:prod",
     "test": "mocha",
     "test:watch": "npm run test -- -w"
   },

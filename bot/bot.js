@@ -5,7 +5,7 @@ var config;
 try {
   config = require('../config.json');
 } catch (e) {
-  config = {"settings":{"prod":{"debug":"false","db":process.env.DATABSE_URL}},"authentication":{"token":process.env.SLACK}};
+  config = {"settings":{"prod":{"debug":"false","db":process.env.DATABASE_URL}},"authentication":{"token":process.env.SLACK}};
 }
 var queryDB = require('./query.js');
 var connectionString = process.env.DEV ? config.settings.dev.db : config.settings.prod.db;
@@ -36,7 +36,7 @@ pg.connect(connectionString, function(err, client) {
     // Is available in channels that bot is in.
     controller.on('direct_mention', function(bot, message) {
       console.log('RECEIVED', message);
-      botResponse(message.text, function (text) {
+      botResponse(message.text, client, function (text) {
         bot.reply(message, text);
       });
     });
