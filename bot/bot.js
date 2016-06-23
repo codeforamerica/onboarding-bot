@@ -1,7 +1,12 @@
 var Botkit = require('botkit');
 var botResponse = require('./response');
 var pg = require('pg').native;
-var config = require('../config.json');
+var config;
+try {
+  config = require('../config.json');
+} catch (e) {
+  config = {"settings":{"prod":{"debug":"false","db":process.env.DATABSE_URL}},"authentication":{"token":process.env.SLACK}};
+}
 var queryDB = require('./query.js');
 var connectionString = process.env.DEV ? config.settings.dev.db : config.settings.prod.db;
 
@@ -14,7 +19,7 @@ controller.spawn(config.authentication).startRTM();
 pg.connect(connectionString, function(err, client) {
     if (err) console.warn('ERROR 🚫:\n', err);
 
-    // Dummy request for latest_message
+    // Dummy request for some message in database
     queryDB(client, function(result) {
       console.log('SUCCESS ✅:\n', result);
     });
