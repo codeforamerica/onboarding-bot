@@ -4,8 +4,8 @@
   "description": "Brief new employees about onboarding activities via Slack",
   "main": "bot/index.js",
   "scripts": {
-    "start": "env DEV=true node bot/bot.js",
-    "start:prod": "env DEV=prod node bot/bot.js",
+    "start": "env DEV=false node bot/bot.js",
+    "start:dev": "env DEV=true node bot/bot.js",
     "setupdb": "createdb onboarding && psql -d onboarding -f scaffold_dev.sql",
     "setupdb:prod": "heroku pg:psql --app onboarding-bot-cfa < scaffold_prod.sql",
     "dropdb": "dropdb onboarding",
