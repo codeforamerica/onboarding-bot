@@ -29,4 +29,6 @@ Create a `config.json` file in the root of the project folder, and populate it w
 }
 ```
 
-The bot uses some natural language processing to enable conversation interaction. The sample text its trained upon exists in `bot/training.json`. The keys e.g. `member_info` hook into functionality specified in `bot/handlers/` directory and `bot/response.js` file. 
+Set up your database by making sure you have `postgres` (9.5.x) installed on your machine. Once you have Postgres installed, run `npm run setupdb`. If you'd like to delete or reset the onboarding-bot's database, run `npm run dropdb` or `npm run resetdb` respectively.
+
+The bot uses some natural language processing to enable conversation interaction. The sample text its trained upon exists in `bot/training.json`. The keys e.g. `member_info` hook into functionality specified in `bot/handlers/` directory and `bot/response.js` file.
