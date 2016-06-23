@@ -36,7 +36,7 @@ pg.connect(connectionString, function(err, client) {
     // Is available in channels that bot is in.
     controller.on('direct_mention', function(bot, message) {
       console.log('RECEIVED', message);
-      botResponse(message.text, function (text) {
+      botResponse(message.text, client, function (text) {
         bot.reply(message, text);
       });
     });

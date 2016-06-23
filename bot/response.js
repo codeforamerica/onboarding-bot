@@ -21,7 +21,7 @@ for (var key in training) {
 classifier.train();
 
 // Export logic
-module.exports = function(text, cb) {
+module.exports = function(text, client, cb) {
   var category = classifier.classify(text);
   switch (category) {
     case 'member_start':
