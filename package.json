@@ -2,18 +2,21 @@
   "name": "onboarding-bot",
   "version": "0.0.1",
   "description": "Brief new employees about onboarding activities via Slack",
-  "main": "bot/index.js",
+  "main": "bot/bot.js",
   "scripts": {
     "start": "env DEV=false node bot/bot.js",
     "start:dev": "env DEV=true node bot/bot.js",
-    "setupdb": "createdb onboarding && psql -d onboarding -f scaffold_dev.sql",
-    "setupdb:prod": "heroku pg:psql --app onboarding-bot-cfa < scaffold_prod.sql",
+    "setupdb": "createdb onboarding && psql -d onboarding -f scaffold.sql",
+    "setupdb:prod": "heroku pg:psql --app onboarding-bot-cfa < scaffold.sql",
     "dropdb": "dropdb onboarding",
     "dropdb:prod": "heroku pg:psql --app onboarding-bot-cfa -c \"DROP TABLE members, messages, resources;\"",
     "resetdb": "npm run dropdb && npm run setupdb",
     "resetdb:prod": "npm run dropdb:prod && npm run setupdb:prod",
     "test": "mocha",
-    "test:watch": "npm run test -- -w"
+    "test:watch": "npm run test -- -w",
+    "build:grunt": "grunt",
+    "build:webpack": "webpack -p",
+    "build:webpack:watch": "npm run build:webpack -- -w"
   },
   "repository": {
     "type": "git",
@@ -22,7 +25,8 @@
   "keywords": [
     "onboarding",
     "bot",
-    "Slack"
+    "Slack",
+    "Code for America"
   ],
   "author": "Code for America",
   "license": "MIT",
@@ -31,7 +35,18 @@
   },
   "homepage": "https://github.com/codeforamerica/onboarding-bot#readme",
   "devDependencies": {
-    "chai": "^3.5.0"
+    "autoprefixer": "^6.3.6",
+    "babel-core": "^6.10.4",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "chai": "^3.5.0",
+    "cssnano": "^3.7.1",
+    "grunt": "^1.0.1",
+    "grunt-contrib-sass": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-postcss": "^0.8.0",
+    "webpack": "^1.13.1"
   },
   "dependencies": {
     "botkit": "^0.2.0",
@@ -39,6 +54,8 @@
     "express": "^4.14.0",
     "natural": "^0.4.0",
     "pg": "^5.1.0",
-    "pg-native": "^1.10.0"
+    "pg-native": "^1.10.0",
+    "react": "^15.1.0",
+    "react-dom": "^15.1.0"
   }
 }
