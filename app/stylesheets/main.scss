@@ -1,0 +1,34 @@
+$ocean: hsl(175, 100%, 40%);
+$sand:  hsl(52, 72%, 90%);
+$rose:  hsl(345, 69%, 46%);
+
+html {
+  background-color: $sand;
+  font-family: 'Lato', serif;
+}
+
+a {
+  text-decoration: none !important;
+  color: $rose;
+}
+
+code {
+  box-shadow: $rose 0 1.5px 0 0;
+}
+
+header {
+  background-color: $ocean;
+  color: $sand;
+  margin: auto 0;
+  box-shadow: darken($ocean, 10) 0 3px 0 0;
+  padding: 25px;
+  .center-me {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    p {
+      text-shadow: 1px 1px darken($ocean, 10);
+    }
+  }
+}
