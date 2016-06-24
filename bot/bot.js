@@ -1,3 +1,4 @@
+var path = require('path');
 var Botkit = require('botkit');
 var botResponse = require('./response');
 var pg = require('pg').native;
@@ -5,6 +6,7 @@ var config;
 try {
   config = require('../config.json');
 } catch (e) {
+  console.warn('ERROR 🚫:\n', e);
   config = {"settings":{"prod":{"debug":"false","db":process.env.DATABASE_URL},"dev":{"debug":"false","db":process.env.DATABASE_URL}},"authentication":{"token":process.env.SLACK}};
 }
 var queryDB = require('./query.js');
@@ -19,15 +21,17 @@ controller.spawn(config.authentication).startRTM();
 var express = require('express');
 var server = express();
 var port = process.env.PORT || 8000;
+var dir = path.join(__dirname, '/../public');
+server.use(express.static(dir));
 
 // Connect to our Postges database
 pg.connect(connectionString, function(err, client) {
     if (err) console.warn('ERROR 🚫:\n', err);
 
     // Dummy request for some message in database
-    queryDB(client, function(result) {
-      console.log('SUCCESS ✅:\n', result);
-    });
+    // queryDB(client, function(result) {
+    //   console.log('SUCCESS ✅:\n', result);
+    // });
 
     // Set-up handler for bot's direct messaging response
     controller.on('direct_message', function(bot, message) {
@@ -46,12 +50,17 @@ pg.connect(connectionString, function(err, client) {
       });
     });
 
-    server.get('/', function (req, res) {
-      res.send('Welcome to the Code for America\'s onboarding-bot 🚢');
+    // Routes for our frontend-bot interface
+    server.get('/gimme', function(req, res) {
+      res.send('Welcome to the Code for America\'s onboarding-bot 🚢. Here\'s what you asked for.');
     });
 
-    server.listen(port, function () {
-      console.log('Listening on port 80');
+    server.get('/takethis', function(req, res) {
+      res.send('Welcome to the Code for America\'s onboarding-bot 🚢. Thank you for that!');
+    });
+
+    server.listen(port, function() {
+      console.log('Listening on given port');
     });
 
     // Export for testing
