@@ -10,6 +10,9 @@ html, body {
 a {
   text-decoration: none !important;
   color: $rose;
+  &:hover {
+    color: $rose;
+  }
 }
 
 code {
@@ -55,4 +58,9 @@ header {
 
 .react-tabs [role=tabpanel] {
   padding: 7px 28px;
+}
+
+.table-hover tbody tr:hover {
+  background-color: $ocean !important;
+  color: $sand;
 }
