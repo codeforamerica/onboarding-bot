@@ -1,4 +1,5 @@
 var path = require('path');
+
 var Botkit = require('botkit');
 var botResponse = require('./response');
 var pg = require('pg').native;
@@ -28,11 +29,6 @@ server.use(express.static(dir));
 pg.connect(connectionString, function(err, client) {
     if (err) console.warn('ERROR 🚫:\n', err);
 
-    // Dummy request for some message in database
-    // queryDB(client, function(result) {
-    //   console.log('SUCCESS ✅:\n', result);
-    // });
-
     // Set-up handler for bot's direct messaging response
     controller.on('direct_message', function(bot, message) {
       console.log('RECEIVED', message);
@@ -51,11 +47,17 @@ pg.connect(connectionString, function(err, client) {
     });
 
     // Routes for our frontend-bot interface
-    server.get('/gimme', function(req, res) {
-      res.send('Welcome to the Code for America\'s onboarding-bot 🚢. Here\'s what you asked for.');
+    // GET /gimme returns item of choice, with limit specifications
+    server.get('/gimme/:field', function(req, res) {
+      // Request for some :field in the database
+      var limit = req.query.limit || 10;
+      var command = `SELECT * FROM ${req.params.field} LIMIT ${limit};`;
+      queryDB(client, command, function(result) {
+        res.json(result.rows);
+      });
     });
 
-    server.get('/takethis', function(req, res) {
+    server.post('/takethis/:field/:id', function(req, res) {
       res.send('Welcome to the Code for America\'s onboarding-bot 🚢. Thank you for that!');
     });
 

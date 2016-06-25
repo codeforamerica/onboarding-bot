@@ -1,7 +1,7 @@
-module.exports = function(client, cb) {
+module.exports = function(client, command, cb) {
 
-  // Get lastest message queued
-  client.query("SELECT time_to_post FROM messages LIMIT 5;", null, function(err, result) {
+  // Get item specified with given command
+  client.query(command, null, function(err, result) {
     cb(result);
   });
 
