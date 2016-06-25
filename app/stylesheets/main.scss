@@ -2,7 +2,7 @@ $ocean: hsl(175, 100%, 40%);
 $sand:  hsl(52, 72%, 90%);
 $rose:  hsl(345, 69%, 46%);
 
-html {
+html, body {
   background-color: $sand;
   font-family: 'Lato', serif;
 }
@@ -31,4 +31,28 @@ header {
       text-shadow: 1px 1px darken($ocean, 10);
     }
   }
+}
+
+.ReactTabs__Tab--selected {
+  background-color: $sand !important;
+}
+
+.react-tabs [role=tab][aria-selected=true] {
+  border: 2px solid darken($ocean, 10);
+  border-bottom: none;
+  color: darken($ocean, 10);
+}
+
+.react-tabs [role=tablist] {
+  border-bottom: 2px solid darken($ocean, 10);
+}
+
+.react-tabs [role=tab] {
+  padding: 12px 24px;
+  bottom: -1.5px;
+  text-shadow: 0.5px 0.5px white;
+}
+
+.react-tabs [role=tabpanel] {
+  padding: 7px 28px;
 }
