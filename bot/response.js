@@ -25,22 +25,22 @@ module.exports = function(text, client, cb) {
   var category = classifier.classify(text);
   switch (category) {
     case 'member_start':
-      cb(member_start(text));
+      cb(member_start(text, client));
       break;
     case 'member_info':
-      cb(member_info(text));
+      cb(member_info(text, client));
       break;
     case 'member_edit':
-      cb(member_edit(text));
+      cb(member_edit(text, client));
       break;
     case 'resources_info':
-      cb(resources_info(text));
+      cb(resources_info(text, client));
       break;
     case 'personnel_info':
-      cb(personnel_info(text));
+      cb(personnel_info(text, client));
       break;
     case 'quiet_mode':
-      cb(quiet_mode(text));
+      cb(quiet_mode(text, client));
       break;
     default:
       cb('I don\'t understand that 😕');

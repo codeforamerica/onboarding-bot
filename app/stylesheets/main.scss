@@ -1,5 +1,5 @@
 $ocean: hsl(175, 100%, 40%);
-$sand:  hsl(52, 72%, 90%);
+$sand:  hsl(52, 99%, 99%);
 $rose:  hsl(345, 69%, 46%);
 
 html, body {
@@ -63,4 +63,12 @@ header {
 .table-hover tbody tr:hover {
   background-color: $ocean !important;
   color: $sand;
+}
+
+table.table-responsive.table-hover {
+  border-color: $ocean;
+}
+
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+  border-color: $ocean;
 }
