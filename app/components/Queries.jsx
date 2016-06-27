@@ -22,7 +22,7 @@ export default class Queries extends Component {
       <table className="table table-responsive table-hover">
         <thead>
           <tr>
-            { Object.keys(this.state.data).map(function(key) {
+            { this.props.keys.map(function(key) {
                 return <th>{key}</th>
             })}
             <th></th>
