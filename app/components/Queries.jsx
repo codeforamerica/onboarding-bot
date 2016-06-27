@@ -8,7 +8,7 @@ export default class Queries extends Component {
     }
   }
   componentDidMount() {
-    $.getJSON("/gimme/members", function(data) {
+    $.getJSON("/gimme/"+this.props.item, function(data) {
       var items = [];
       $.each(data, function( key, val ) {
         items.push(val);
@@ -17,23 +17,24 @@ export default class Queries extends Component {
     }.bind(this));
   }
   render() {
+    var data_keys;
     return <div>
       <table className="table table-responsive table-hover">
         <thead>
           <tr>
-            <th>ID</th>
-            <th>@Name</th>
-            <th>Description</th>
+            { Object.keys(this.state.data).map(function(key) {
+                return <th>{key}</th>
+            })}
             <th></th>
           </tr>
         </thead>
         <tbody>
             {
               this.state.data.map(function(datum) {
-                return <tr key={datum.member_id}>
-                    <td>{datum.member_id}</td>
-                    <td>{datum.member_name}</td>
-                    <td>{datum.member_descript}</td>
+                return <tr>
+                    { Object.keys(datum).map(function(key) {
+                      return <td>{datum[key]}</td>
+                    }) }
                     <td><a href="#">Edit</a></td>
                   </tr>
               })

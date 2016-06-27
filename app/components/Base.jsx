@@ -14,15 +14,15 @@ export default class Base extends Component {
 
           <TabPanel>
             <h2>Some members for ya</h2>
-            <Query item="members" />
+            <Query item="members" keys={['member_id', 'member_name', 'member_descript', 'last_message_id']} />
           </TabPanel>
           <TabPanel>
             <h2>Some messages for ya</h2>
-            <Query item="messages"/>
+            <Query item="messages" keys={['msg_id', 'msg_text', 'receiver_id', 'receiver_name', 'time_to_post', 'sender_id', 'sender_name']} />
           </TabPanel>
           <TabPanel>
             <h2>Some resources for ya</h2>
-            <Query item="resources"/>
+            <Query item="resources" keys={['resource_id', 'resource_title', 'resource_keywords', 'resource_link']} />
           </TabPanel>
         </Tabs>
         </div>
