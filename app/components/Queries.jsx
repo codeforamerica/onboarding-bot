@@ -8,7 +8,7 @@ export default class Queries extends Component {
     }
   }
   componentDidMount() {
-    $.getJSON("/gimme/"+this.props.item, function(data) {
+    $.getJSON("/gimme/" + this.props.item, function(data) {
       var items = [];
       $.each(data, function( key, val ) {
         items.push(val);
