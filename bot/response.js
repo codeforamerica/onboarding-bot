@@ -44,5 +44,7 @@ module.exports = function(text, client, cb) {
       break;
     default:
       cb('I don\'t understand that 😕');
+      // TODO: If bot doesn't understand a pharse,
+      // it could ask moderators in CfA onboarding slack channel what they meant.
   }
 }
