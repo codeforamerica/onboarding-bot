@@ -21,30 +21,30 @@ for (var key in training) {
 classifier.train();
 
 // Export logic
-module.exports = function(text, client, cb) {
+module.exports = function(text, client, bot, message) {
   var category = classifier.classify(text);
   switch (category) {
     case 'member_start':
-      cb(member_start(text, client));
+      member_start(text, client, bot, message);
       break;
     case 'member_info':
-      cb(member_info(text, client));
+      member_info(text, client, bot, message);
       break;
     case 'member_edit':
-      cb(member_edit(text, client));
+      member_edit(text, client, bot, message);
       break;
     case 'resources_info':
-      cb(resources_info(text, client));
+      resources_info(text, client, bot, message);
       break;
     case 'personnel_info':
-      cb(personnel_info(text, client));
+      personnel_info(text, client, bot, message);
       break;
     case 'quiet_mode':
-      cb(quiet_mode(text, client));
+      quiet_mode(text, client, bot, message);
       break;
     default:
-      cb('I don\'t understand that 😕');
-      // TODO: If bot doesn't understand a pharse,
+      return 'I don\'t understand that 😕';
+      // TODO: If bot doesn't understand a phrase,
       // it could ask moderators in CfA onboarding slack channel what they meant.
   }
 }

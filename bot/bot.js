@@ -1,4 +1,5 @@
 var path = require('path');
+var os = require('os');
 
 var Botkit = require('botkit');
 var botResponse = require('./response');
@@ -7,16 +8,16 @@ var config;
 try {
   config = require('../config.json');
 } catch (e) {
-  console.warn('ERROR 🚫:\n', e);
-  config = {"settings":{"prod":{"debug":"false","db":process.env.DATABASE_URL},"dev":{"debug":"false","db":process.env.DATABASE_URL}},"authentication":{"token":process.env.SLACK}};
+  console.warn('Could not find local config.json, assumming production environment.\n');
+  config = {"settings":{"prod":{"debug":"false","db":process.env.DATABASE_URL},"dev":{"debug":"false","db":process.env.DATABASE_URL}},"authentication_prod":{"token":process.env.SLACK},"authentication_dev":{"token":process.env.SLACK}};
 }
-var queryDB = require('./query.js');
 var connectionString = process.env.DEV ? config.settings.dev.db : config.settings.prod.db;
 
 // Our configuration and initialization for botkit
 var setup = process.env.DEV ? config.settings.dev : config.settings.prod;
 var controller = Botkit.slackbot(setup);
-controller.spawn(config.authentication).startRTM();
+var authentication = process.env.DEV ? config.authentication_dev : config.authentication_prod;
+controller.spawn(authentication).startRTM();
 
 // Setup our express server, for later front-end interface
 var express = require('express');
@@ -29,21 +30,17 @@ server.use(express.static(dir));
 pg.connect(connectionString, function(err, client) {
     if (err) console.warn('ERROR 🚫:\n', err);
 
-    // Set-up handler for bot's direct messaging response
-    controller.on('direct_message', function(bot, message) {
-      console.log('RECEIVED', message);
-      botResponse(message.text, client, function (text) {
-        bot.reply(message, text);
-      });
+    // Modes of interaction
+    var modes = ['direct_mention', 'direct_message', 'channel_joined', 'channel_leave'];
+
+    // Set-up bot's handlers
+    controller.on(modes, function(bot, message) {
+      botResponse(message.text, client, bot, message);
     });
 
-    // Set-up handler for bot's direct mention response.
-    // Is available in channels that bot is in.
-    controller.on('direct_mention', function(bot, message) {
-      console.log('RECEIVED', message);
-      botResponse(message.text, client, function (text) {
-        bot.reply(message, text);
-      });
+    controller.hears(['uptime', 'identify yourself', 'who are you', 'what is your name'],
+    'direct_message,direct_mention,mention', function(bot, message) {
+        bot.reply(message, ':robot_face: I am <@' + bot.identity.name +'> and have been running for ' + process.uptime() + ' seconds on ' + os.hostname() + '. Visit my user-interface at https://cfa.me/onboarding');
     });
 
     // Routes for our frontend-bot interface
@@ -52,12 +49,13 @@ pg.connect(connectionString, function(err, client) {
       // Request for some :field in the database
       var limit = req.query.limit || 10;
       var command = `SELECT * FROM ${req.params.field} LIMIT ${limit};`;
-      queryDB(client, command, function(result) {
+      // Get item specified with given command
+      client.query(command, null, function(err, result) {
         res.json(result.rows);
       });
     });
 
-    server.post('/takethis/:field/:id', function(req, res) {
+    server.post('/take/:field/:id', function(req, res) {
       res.send('Welcome to the Code for America\'s onboarding-bot 🚢. Thank you for that!');
     });
 
