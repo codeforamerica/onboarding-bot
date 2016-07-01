@@ -1,13 +1,21 @@
-var natural = require('natural');
-var chrono = require('chrono-node');
+const natural = require('natural');
+const chrono = require('chrono-node');
+const moment = require('moment');
+const querystring = require('querystring');
 
-module.exports = function(text, client) {
+module.exports = function(text, client, bot, message) {
   var date = chrono.parseDate(text);
+  var timeFromNow = moment(date).fromNow();
   var person = text.match(/\<\@[a-z0-9]+\>/gim);
 
-  client.query(`INSERT INTO members (member_id,member_name,member_descript,last_message_id) VALUES
-  (4,${person},'New person to be onboarded',4)`, null, function(err, result) {
-    if (err) { console.log(err) };
-    return 'Ok, I\'ve added that event to my database. ' + person + ' will be onboarded ' + date + '! 💻🇺🇸';
+  // TODO: Query Slack user.info API to get deets about ${person} prior to registering them in DB
+
+  client.query(`INSERT INTO members (member_id,member_name,member_descript,last_message_id) VALUES (4, '${querystring.escape(person)}', 'New person to be onboarded', 4);`, null, function(err, result) {
+    if (err || !date || !person) {
+      bot.reply(message, `Sorry, can\'t do that because ... \n ${err || '🙃'}`);
+    } else {
+      bot.reply(message, 'Ok, I\'ve added that event to my database. ' + person + ' will be onboarded ' + timeFromNow + '! 💻🇺🇸');
+    }
+    console.log("DB result 🗃:", result);
   });
 }
