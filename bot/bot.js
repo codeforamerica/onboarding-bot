@@ -1,3 +1,6 @@
+import GraphHTTP from 'express-graphql';
+import Schema from './graphql/schema';
+
 const path = require('path');
 const os = require('os');
 const querystring = require('querystring');
@@ -59,6 +62,13 @@ pg.connect(connectionString, function(err, client) {
         res.json(result.rows);
       });
     });
+
+
+    server.use('/graphql', GraphHTTP({
+      schema: Schema,
+      pretty: true,
+      graphiql: true
+    }));
 
     // Routes for writing to the database, via HTTP POST
     server.post('/take/:field', function(req, res) {
