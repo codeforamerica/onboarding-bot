@@ -1,15 +1,17 @@
-var path = require('path');
-var os = require('os');
+const path = require('path');
+const os = require('os');
+const querystring = require('querystring');
+const _ = require('lodash');
+const Botkit = require('botkit');
 
-var Botkit = require('botkit');
+const pg = require('pg').native;
 var botResponse = require('./response');
-var pg = require('pg').native;
 var config;
 try {
   config = require('../config.json');
 } catch (e) {
   console.warn('Could not find local config.json, assumming production environment.\n');
-  config = {"settings":{"prod":{"debug":"false","db":process.env.DATABASE_URL},"dev":{"debug":"false","db":process.env.DATABASE_URL}},"authentication_prod":{"token":process.env.SLACK},"authentication_dev":{"token":process.env.SLACK}};
+  config = {'settings':{'prod':{'debug':'false','db':process.env.DATABASE_URL},'dev':{'debug':'false','db':process.env.DATABASE_URL}},'authentication_prod':{'token':process.env.SLACK},'authentication_dev':{'token':process.env.SLACK}};
 }
 var connectionString = process.env.DEV ? config.settings.dev.db : config.settings.prod.db;
 
@@ -19,9 +21,12 @@ var controller = Botkit.slackbot(setup);
 var authentication = process.env.DEV ? config.authentication_dev : config.authentication_prod;
 controller.spawn(authentication).startRTM();
 
-// Setup our express server, for later front-end interface
-var express = require('express');
+// Setup our express server, for serving front-end interface
+const express = require('express');
+const bodyParser = require('body-parser');
 var server = express();
+server.use(bodyParser.json()); // for parsing application/json
+server.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 var port = process.env.PORT || 8000;
 var dir = path.join(__dirname, '/../public');
 server.use(express.static(dir));
@@ -40,7 +45,7 @@ pg.connect(connectionString, function(err, client) {
 
     controller.hears(['uptime', 'identify yourself', 'who are you', 'what is your name'],
     'direct_message,direct_mention,mention', function(bot, message) {
-        bot.reply(message, ':robot_face: I am <@' + bot.identity.name +'> and have been running for ' + process.uptime() + ' seconds on ' + os.hostname() + '. Visit my user-interface at https://cfa.me/onboarding');
+        bot.reply(message, ':robot_face: I am <@' + bot.identity.name +'> and have been running for ' + process.uptime() + ' seconds on ' + os.hostname() + '. Visit my user-interface at http://c4a.me/onboarding');
     });
 
     // Routes for our frontend-bot interface
@@ -48,21 +53,61 @@ pg.connect(connectionString, function(err, client) {
     server.get('/gimme/:field', function(req, res) {
       // Request for some :field in the database
       var limit = req.query.limit || 10;
-      var command = `SELECT * FROM ${req.params.field} LIMIT ${limit};`;
+      var command = `SELECT * FROM ${querystring.escape(req.params.field)} LIMIT ${querystring.escape(limit)};`;
       // Get item specified with given command
       client.query(command, null, function(err, result) {
         res.json(result.rows);
       });
     });
 
-    server.post('/take/:field/:id', function(req, res) {
-      res.send('Welcome to the Code for America\'s onboarding-bot 🚢. Thank you for that!');
+    // Routes for writing to the database, via HTTP POST
+    server.post('/take/:field', function(req, res) {
+      var body = req.body;
+      var fields = fieldsfor(req.params.field);
+      var fields_formatted = fields.map(function(words) {
+        return words.substring(0,1).toUpperCase() + words.substring(1, words.length).toLowerCase();
+      });
+      var id_key = req.params.field + '_id';
+
+      var commandPull = `SELECT * FROM ${querystring.escape(req.params.field)} WHERE (${id_key} = ${querystring.escape(body[id_key])});`;
+
+      // We ask for infomation user is trying to update
+      client.query(commandPull, null, function(err, result) {
+        if (err) console.warn(err);
+        var template = result.rows[0];
+        console.log(_.assign(template, body));
+        var values = Object.keys(_.assign(template, body)).map(function(datum) { return body[datum] }).join(',');
+        console.log('VALUES', values);
+        var commandPush = `UPDATE ${querystring.escape(req.params.field)} (${fields}) VALUES (${values}) WHERE (${querystring.escape(id_key)} = ${querystring.escape(body[id_key])});`;
+        res.send(commandPush);
+      });
+
     });
 
     server.listen(port, function() {
-      console.log('Listening on given port');
+      console.log('Listening on given http://localhost:' + port);
     });
 
     // Export for testing
     module.exports = controller;
 });
+
+function fieldsfor(field) {
+  switch (field) {
+    case 'members':
+      var words = ['members_id', 'members_name', 'members_descript', 'last_message_id'];
+      return words;
+      break;
+    case 'messages':
+      var words = ['messages_id', 'messages_text', 'receivers_id', 'receivers_name', 'time_to_post', 'senders_id', 'senders_name'];
+      return words;
+      break;
+    case 'resources':
+      var words = ['resources_id', 'resources_title', 'resources_keywords', 'resources_link'];
+      return words;
+      break;
+    default:
+      return ['NULL'];
+      break;
+  }
+}
