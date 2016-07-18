@@ -10,7 +10,7 @@ module.exports = function(text, client, bot, message) {
 
   // TODO: Query Slack user.info API to get deets about ${person} prior to registering them in DB
 
-  client.query(`INSERT INTO members (member_id,member_name,member_descript,last_message_id) VALUES (4, '${querystring.escape(person)}', 'New person to be onboarded', 4);`, null, function(err, result) {
+  client.query(`INSERT INTO members (members_id,members_name,members_descript,last_message_id) VALUES (DEFAULT, '${querystring.escape(person)}', 'New person to be onboarded', 4);`, null, function(err, result) {
     if (err || !date || !person) {
       bot.reply(message, `Sorry, can\'t do that because ... \n ${err || '🙃'}`);
     } else {
