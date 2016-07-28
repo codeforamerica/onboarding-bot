@@ -49,8 +49,8 @@ Conn.sync({force: true})
   				memberTag: tag,
   				memberDescription: descript,
           lastMessageId: i
-  			}).then(person => {
-          return person.createMessage({
+  			}).then(member => {
+          return member.createMessage({
             messageText: message_text,
             timeToPost: time,
             senderTag: tags[1]

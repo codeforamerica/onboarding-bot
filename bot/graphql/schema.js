@@ -17,13 +17,13 @@ import Resource from './types/resource';
 import Training from './types/training';
 
 // We import our root Query and Mutation types
-// import Mutation from './mutations';
+import Mutation from './mutations';
 import Query from './queries';
 
 // We simply define our GraphQL schema here
 const Schema = new GraphQLSchema({
-	query: Query
-	// mutation: Mutation
+	query: Query,
+	mutation: Mutation
 });
 
 export default Schema;

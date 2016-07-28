@@ -1,8 +1,10 @@
 import {
   GraphQLObjectType,
+  GraphQLNonNull,
   GraphQLString,
   GraphQLInt,
-  GraphQLList
+  GraphQLList,
+  GraphQLFloat
 } from 'graphql';
 
 // Our GraphQL model types to be specified in the Mutation
@@ -71,19 +73,21 @@ const Mutation = new GraphQLObjectType({
           memberIds: { type: new GraphQLList(GraphQLInt) }
 				},
 				resolve(_, args) {
-          console.log(db.models.member.findAll( { where: { $in: { id: args.memberIds } } } ));
 					return db.models.member
             .findAll({
               where: {
-                $in: { id: args.memberIds }
+                id: { $in: args.memberIds }
               }
             })
-            .then((member) => {
-              return member.messageCreate({
-      						messageText: args.messageText,
-      						timeToPost: args.timeToPost,
-      						senderTag: args.senderTag
-      					});
+            .then((members) => {
+              return members.map((member) => {
+                return member.createMessage({
+        						messageText: args.messageText,
+        						timeToPost: args.timeToPost,
+        						senderTag: args.senderTag
+        					});
+              });
+
             });
 				}
 			},
@@ -118,56 +122,91 @@ const Mutation = new GraphQLObjectType({
 					});
 				}
 			},
-			createItem: {
-				type: Item,
+			createResource: {
+				type: Resource,
 				args: {
-					price: { type: new GraphQLNonNull(GraphQLFloat) },
-					description: { type: new GraphQLNonNull(GraphQLString) },
-					imageUrl: { type: new GraphQLNonNull(GraphQLString) },
-					name: { type: new GraphQLNonNull(GraphQLString) },
-					messageId: { type: new GraphQLNonNull(GraphQLInt) }
+					resourceTitle: { type: new GraphQLNonNull(GraphQLFloat) },
+					resourceKeywords: { type: new GraphQLNonNull(GraphQLString) },
+					resourceLink: { type: new GraphQLNonNull(GraphQLString) }
 				},
 				resolve(_, args) {
-					return db.models.item.create({
-						price: args.price,
-						description: args.description,
-						imageUrl: args.imageUrl,
-						name: args.name,
-						messageId: args.messageId
+					return db.models.resource.create({
+						resourceTitle: args.resourceTitle,
+						resourceKeywords: args.resourceKeywords,
+						resourceLink: args.resourceLink
 					});
 				}
 			},
-			deleteItem: {
-				type: Item,
+			deleteResource: {
+				type: Resource,
 				args: {
 					id: { type: new GraphQLNonNull(GraphQLInt) }
 				},
-				resolve(_, args){
-					return db.models.item.destroy({
+				resolve(_, args) {
+					return db.models.resource.destroy({
 						where: {id: args.id}
 					});
 				}
 			},
-			updateItem: {
-				type: Item,
+			updateResource: {
+				type: Resource,
 				args: {
-					id: { type: new GraphQLNonNull(GraphQLInt) },
-					price: { type: new GraphQLNonNull(GraphQLFloat) },
-					description: { type: new GraphQLNonNull(GraphQLString) },
-					imageUrl: { type: new GraphQLNonNull(GraphQLString) },
-					name: { type: new GraphQLNonNull(GraphQLString) }
+          resourceTitle: { type: new GraphQLNonNull(GraphQLFloat) },
+					resourceKeywords: { type: new GraphQLNonNull(GraphQLString) },
+					resourceLink: { type: new GraphQLNonNull(GraphQLString) },
+          id: { type: new GraphQLNonNull(GraphQLInt) }
 				},
 				resolve(_, args){
-					return db.models.item.update({
-						price: args.price,
-						description: args.description,
-						imageUrl: args.imageUrl,
-						name: args.name
+					return db.models.resource.update({
+						resourceTitle: args.resourceTitle,
+						resourceKeywords: args.resourceKeywords,
+						resourceLink: args.resourceLink
+					}, {
+						where: {id: args.id}
+					});
+				}
+			},
+      createTraining: {
+				type: Training,
+				args: {
+					trainingCategory: { type: new GraphQLNonNull(GraphQLFloat) },
+					trainingText: { type: new GraphQLNonNull(GraphQLString) }
+				},
+				resolve(_, args) {
+					return db.models.training.create({
+						trainingCategory: args.trainingCategory,
+						trainingText: args.trainingText
+					});
+				}
+			},
+			deleteTraining: {
+				type: Training,
+				args: {
+					id: { type: new GraphQLNonNull(GraphQLInt) }
+				},
+				resolve(_, args) {
+					return db.models.training.destroy({
+						where: {id: args.id}
+					});
+				}
+			},
+			updateTraining: {
+				type: Training,
+				args: {
+          trainingCategory: { type: new GraphQLNonNull(GraphQLFloat) },
+					trainingText: { type: new GraphQLNonNull(GraphQLString) },
+          id: { type: new GraphQLNonNull(GraphQLInt) }
+				},
+				resolve(_, args){
+					return db.models.training.update({
+						trainingCategory: args.trainingCategory,
+						trainingText: args.trainingText
 					}, {
 						where: {id: args.id}
 					});
 				}
 			}
+
 		}
 	}
 });
