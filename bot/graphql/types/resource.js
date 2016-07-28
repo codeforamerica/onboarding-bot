@@ -28,7 +28,7 @@ const Resource = new GraphQLObjectType({
 				}
 			},
 			resourceLink: {
-				type: GraphQLInt,
+				type: GraphQLString,
 				resolve(resource) {
 					return resource.resourceLink;
 				}

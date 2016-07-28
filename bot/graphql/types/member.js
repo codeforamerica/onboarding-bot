@@ -4,7 +4,7 @@ import {
 	GraphQLList,
 	GraphQLObjectType
 } from 'graphql';
-import Message from './member';
+import Message from './message';
 
 const Member = new GraphQLObjectType({
 	name: 'Member',

@@ -29,7 +29,7 @@ const Message = new GraphQLObjectType({
 				}
 			},
 			senderTag: {
-				type: GraphQLInt,
+				type: GraphQLString,
 				resolve(message) {
 					return message.senderTag;
 				}
@@ -47,7 +47,7 @@ const Message = new GraphQLObjectType({
 				}
 			},
 			member: {
-				type: Person,
+				type: Member,
 				resolve(message) {
 					return message.getMember()
 				}
