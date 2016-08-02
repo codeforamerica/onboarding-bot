@@ -10,7 +10,7 @@ const Resource = {
 		allowNull: false
 	},
   resourceLink: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.STRING,
 		allowNull: false
   }
 };

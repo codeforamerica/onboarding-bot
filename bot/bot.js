@@ -1,10 +1,13 @@
+import GraphHTTP from 'express-graphql';
+import Schema from './graphql/schema';
+
 const path = require('path');
 const os = require('os');
 const querystring = require('querystring');
 const _ = require('lodash');
 const Botkit = require('botkit');
-
 const pg = require('pg').native;
+
 var botResponse = require('./response');
 var config;
 try {
@@ -29,9 +32,11 @@ server.use(bodyParser.json()); // for parsing application/json
 server.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 var port = process.env.PORT || 8000;
 var dir = path.join(__dirname, '/../public');
+
+// Set up our front-end API
 server.use(express.static(dir));
 
-// Connect to our Postges database
+// Connect to our Postgres database
 pg.connect(connectionString, function(err, client) {
     if (err) console.warn('ERROR 🚫:\n', err);
 
@@ -48,41 +53,12 @@ pg.connect(connectionString, function(err, client) {
         bot.reply(message, ':robot_face: I am <@' + bot.identity.name +'> and have been running for ' + process.uptime() + ' seconds on ' + os.hostname() + '. Visit my user-interface at http://c4a.me/onboarding');
     });
 
-    // Routes for our frontend-bot interface
-    // GET /gimme returns item of choice, with limit specifications
-    server.get('/gimme/:field', function(req, res) {
-      // Request for some :field in the database
-      var limit = req.query.limit || 10;
-      var command = `SELECT * FROM ${querystring.escape(req.params.field)} LIMIT ${querystring.escape(limit)};`;
-      // Get item specified with given command
-      client.query(command, null, function(err, result) {
-        res.json(result.rows);
-      });
-    });
-
-    // Routes for writing to the database, via HTTP POST
-    server.post('/take/:field', function(req, res) {
-      var body = req.body;
-      var fields = fieldsfor(req.params.field);
-      var fields_formatted = fields.map(function(words) {
-        return words.substring(0,1).toUpperCase() + words.substring(1, words.length).toLowerCase();
-      });
-      var id_key = req.params.field + '_id';
-
-      var commandPull = `SELECT * FROM ${querystring.escape(req.params.field)} WHERE (${id_key} = ${querystring.escape(body[id_key])});`;
-
-      // We ask for infomation user is trying to update
-      client.query(commandPull, null, function(err, result) {
-        if (err) console.warn(err);
-        var template = result.rows[0];
-        console.log(_.assign(template, body));
-        var values = Object.keys(_.assign(template, body)).map(function(datum) { return body[datum] }).join(',');
-        console.log('VALUES', values);
-        var commandPush = `UPDATE ${querystring.escape(req.params.field)} (${fields}) VALUES (${values}) WHERE (${querystring.escape(id_key)} = ${querystring.escape(body[id_key])});`;
-        res.send(commandPush);
-      });
-
-    });
+    // Our graphql server API
+    server.use('/gateway', GraphHTTP({
+      schema: Schema,
+      pretty: true,
+      graphiql: process.env.DEV
+    }));
 
     server.listen(port, function() {
       console.log('Listening on given http://localhost:' + port);

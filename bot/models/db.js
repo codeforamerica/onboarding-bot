@@ -3,6 +3,7 @@ import MemberObj from './member';
 import MessageObj from './message';
 import ResourceObj from './resource';
 import TrainingObj from './training';
+import GroupObj from './group';
 
 // Training text to be ported to DB
 const training_text = require('../training.json');
@@ -22,15 +23,16 @@ const Member = Conn.define('member', MemberObj);
 const Message = Conn.define('message', MessageObj);
 const Resource = Conn.define('resource', ResourceObj);
 const Training = Conn.define('training', TrainingObj);
+const Group = Conn.define('group', GroupObj);
 
 // Relationships
-Member.hasMany(Message);
+Member.hasMany(Message, {onDelete: 'CASCADE'});
 Message.belongsTo(Member);
+Member.hasMany(Group);
 
 // Sync our definitions, overriding previous renditions of models here
 Conn.sync({force: true})
   	.then(() => {
-
       // Some fake data to start us off
       let tags = [ undefined, '<@U0V1ZHGJ3>', '<@U039XHJAA>', '<@U02S61FF2>'];
       let descripts = [ undefined, 'Edmund Korley, CODE 2040 Safety & Justice Intern', 'Tomas Apocada, Senior Safety & Justice Engineer', 'Tiffany Andrews, Safety & Justice Product Manager, 2015 Fellow']
@@ -50,15 +52,26 @@ Conn.sync({force: true})
   				memberTag: tag,
   				memberDescription: descript,
           lastMessageId: i
-  			}).then(person => {
-          return person.createMessage({
+  			}).then(member => {
+          member.createMessage({
             messageText: message_text,
             timeToPost: time,
             senderTag: tags[1]
           })
+					member.createGroup({
+						groupName: 'Project Comport'
+					})
         });
       }
 
+			// Add a mock resource
+			Resource.create({
+				resourceTitle: 'List of Code of America staff contact info',
+				resourceKeywords: 'contact,personell,lookup,phone number',
+				resourceLink: 'https://docs.google.com/spreadsheets/d/18kj03DeHBSN4wIWxGk8xMrZz95tR7-HQtIc3cneMRDw/edit?ts=575ee783#gid=6'
+			});
+
+			// Port training text over to DB table
       for (let category in training_text) {
           training_text[category].forEach((text) => {
             Training.create({
@@ -67,7 +80,6 @@ Conn.sync({force: true})
             });
           });
       }
-
 
     });
 
