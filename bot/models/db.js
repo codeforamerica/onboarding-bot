@@ -3,6 +3,7 @@ import MemberObj from './member';
 import MessageObj from './message';
 import ResourceObj from './resource';
 import TrainingObj from './training';
+import GroupObj from './group';
 
 // Training text to be ported to DB
 const training_text = require('../training.json');
@@ -22,10 +23,12 @@ const Member = Conn.define('member', MemberObj);
 const Message = Conn.define('message', MessageObj);
 const Resource = Conn.define('resource', ResourceObj);
 const Training = Conn.define('training', TrainingObj);
+const Group = Conn.define('group', GroupObj);
 
 // Relationships
 Member.hasMany(Message, {onDelete: 'CASCADE'});
 Message.belongsTo(Member);
+Member.hasMany(Group);
 
 // Sync our definitions, overriding previous renditions of models here
 Conn.sync({force: true})
@@ -50,11 +53,14 @@ Conn.sync({force: true})
   				memberDescription: descript,
           lastMessageId: i
   			}).then(member => {
-          return member.createMessage({
+          member.createMessage({
             messageText: message_text,
             timeToPost: time,
             senderTag: tags[1]
           })
+					member.createGroup({
+						groupName: 'Project Comport'
+					})
         });
       }
 
