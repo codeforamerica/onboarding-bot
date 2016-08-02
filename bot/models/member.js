@@ -8,6 +8,9 @@ const Member = {
 	memberDescription: {
 		type: Sequelize.STRING
 	},
+	startDate: {
+		type: Sequelize.STRING
+	},
   lastMessageId: {
     type: Sequelize.INTEGER
   }

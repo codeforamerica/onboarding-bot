@@ -30,6 +30,12 @@ const Member = new GraphQLObjectType({
 					return member.memberDescription
 				}
 			},
+			startDate: {
+				type: GraphQLString,
+				resolve(member) {
+					return member.startDate
+				}
+			},
 			lastMessageId: {
 				type: GraphQLInt,
 				resolve(member) {

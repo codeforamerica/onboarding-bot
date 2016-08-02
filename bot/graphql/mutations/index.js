@@ -211,7 +211,7 @@ const Mutation = new GraphQLObjectType({
       createTraining: {
 				type: Training,
 				args: {
-					trainingCategory: { type: new GraphQLNonNull(GraphQLFloat) },
+					trainingCategory: { type: new GraphQLNonNull(GraphQLString) },
 					trainingText: { type: new GraphQLNonNull(GraphQLString) }
 				},
 				resolve(_, args) {

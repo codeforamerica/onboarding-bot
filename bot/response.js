@@ -5,6 +5,8 @@ let member_edit = require('./handlers/member_edit');
 let resources_info = require('./handlers/resources_info');
 let personnel_info = require('./handlers/personnel_info');
 let quiet_mode = require('./handlers/quiet_mode');
+let add_training = require('./handlers/add_training');
+let remove_training = require('./handlers/remove_training');
 
 // Text to train Bayesian classifier on
 let training = require('./training.json');
@@ -41,6 +43,12 @@ module.exports = function(text, client, bot, message) {
       break;
     case 'quiet_mode':
       quiet_mode(text, client, bot, message);
+      break;
+    case 'add_training':
+      add_training(text, client, bot, message);
+      break;
+    case 'remove_training':
+      remove_training(text, client, bot, message);
       break;
     default:
       return 'I don\'t understand that 😕';

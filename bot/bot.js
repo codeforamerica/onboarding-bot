@@ -67,23 +67,3 @@ pg.connect(connectionString, function(err, client) {
     // Export for testing
     module.exports = controller;
 });
-
-function fieldsfor(field) {
-  switch (field) {
-    case 'members':
-      let words = ['members_id', 'members_name', 'members_descript', 'last_message_id'];
-      return words;
-      break;
-    case 'messages':
-      let words = ['messages_id', 'messages_text', 'receivers_id', 'receivers_name', 'time_to_post', 'senders_id', 'senders_name'];
-      return words;
-      break;
-    case 'resources':
-      let words = ['resources_id', 'resources_title', 'resources_keywords', 'resources_link'];
-      return words;
-      break;
-    default:
-      return ['NULL'];
-      break;
-  }
-}

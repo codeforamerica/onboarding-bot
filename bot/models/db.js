@@ -51,6 +51,7 @@ Conn.sync({force: true})
         Member.create({
   				memberTag: tag,
   				memberDescription: descript,
+					startDate: '2016-08-10 15:07:50',
           lastMessageId: i
   			}).then(member => {
           member.createMessage({
