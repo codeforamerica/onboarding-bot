@@ -12,6 +12,7 @@ import Member from '../types/member';
 import Resource from '../types/resource';
 import Message from '../types/message';
 import Training from '../types/training';
+import Group from '../types/group';
 
 // Import our Sequelize ORM models to back GraphQL queries
 import db from '../../models/db';

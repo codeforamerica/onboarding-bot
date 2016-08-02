@@ -4,6 +4,7 @@ import {
 	GraphQLList,
 	GraphQLObjectType
 } from 'graphql';
+import Member from './member';
 
 const Group = new GraphQLObjectType({
 	name: 'Group',
@@ -22,6 +23,12 @@ const Group = new GraphQLObjectType({
 					return group.groupName
 				}
 			},
+      member: {
+        type: Member,
+        resolve(group) {
+          return group.getMember()
+        }
+      },
 			createdAt: {
 				type: GraphQLString,
 				resolve(group) {

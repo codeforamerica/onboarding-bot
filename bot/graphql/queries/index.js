@@ -24,15 +24,17 @@ const Query = new GraphQLObjectType({
 			members: {
 				type: new GraphQLList(Member),
 				args: {
-          ids: { type: new GraphQLList(GraphQLInt) },
-          memberTags: { type: new GraphQLList(GraphQLString) }
+          ids: { type: new GraphQLList(GraphQLInt) }
 				},
-				resolve(root, args) {
-					return db.models.member.findAll({
-						where: {
-              id: { $in: args.ids }
-            }
-					});
+				resolve(_, args) {
+          if (args.ids) {
+            return db.models.member.findAll({
+  						where: {
+                id: { $in: args.ids }
+              }
+  					});
+          }
+          return db.models.member.findAll({ where: args });
 				}
 			},
       groups: {
