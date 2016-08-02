@@ -5,6 +5,7 @@ import {
 	GraphQLObjectType
 } from 'graphql';
 import Message from './message';
+import Group from './group';
 
 const Member = new GraphQLObjectType({
 	name: 'Member',
@@ -51,6 +52,12 @@ const Member = new GraphQLObjectType({
 				type: new GraphQLList(Message),
 				resolve(member) {
 					return member.getMessages()
+				}
+			},
+			groups: {
+				type: new GraphQLList(Group),
+				resolve(member) {
+					return member.getGroups()
 				}
 			}
 		}

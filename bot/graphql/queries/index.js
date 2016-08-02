@@ -10,6 +10,7 @@ import Member from '../types/member';
 import Resource from '../types/resource';
 import Message from '../types/message';
 import Training from '../types/training';
+import Group from '../types/group';
 
 // Import our Sequelize ORM models to back GraphQL queries
 import db from '../../models/db';
@@ -34,6 +35,18 @@ const Query = new GraphQLObjectType({
 					});
 				}
 			},
+      groups: {
+        type: new GraphQLList(Group),
+        args: {
+          id: { type: GraphQLInt },
+          groupName: { type: GraphQLString }
+        },
+        resolve(root, args) {
+          return db.models.group.findAll({
+            where: args
+          });
+        }
+      },
       resources: {
         type: new GraphQLList(Resource),
         args: {

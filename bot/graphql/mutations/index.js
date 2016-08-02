@@ -64,12 +64,10 @@ const Mutation = new GraphQLObjectType({
 					});
 				}
 			},
-			createMessage: {
-				type: Message,
+      addToGroup: {
+				type: Group,
 				args: {
-					messageText: { type: new GraphQLNonNull(GraphQLString) },
-					timeToPost: { type: new GraphQLNonNull(GraphQLString) },
-					senderTag: { type: new GraphQLNonNull(GraphQLString) },
+					groupName: { type: new GraphQLNonNull(GraphQLString) },
           memberIds: { type: new GraphQLList(GraphQLInt) }
 				},
 				resolve(_, args) {
@@ -81,24 +79,67 @@ const Mutation = new GraphQLObjectType({
             })
             .then((members) => {
               return members.map((member) => {
-                return member.createMessage({
-        						messageText: args.messageText,
-        						timeToPost: args.timeToPost,
-        						senderTag: args.senderTag
+                return member.createGroup({
+        						groupName: args.groupName
         					});
               });
-
             });
 				}
 			},
-			deleteMessage: {
+      removeFromGroup: {
+        type: Group,
+        args: {
+					ids: {type: new GraphQLNonNull(GraphQLInt)}
+				},
+        resolve(_, args){
+          return db.models.group.destroy({
+            where: {
+              id: {
+                $in: args.ids
+              }
+            }
+          });
+        }
+      },
+      createMessages: {
+        type: Message,
+        args: {
+          messageText: { type: new GraphQLNonNull(GraphQLString) },
+          timeToPost: { type: new GraphQLNonNull(GraphQLString) },
+          senderTag: { type: new GraphQLNonNull(GraphQLString) },
+          memberIds: { type: new GraphQLList(GraphQLInt) }
+        },
+        resolve(_, args) {
+          return db.models.member
+            .findAll({
+              where: {
+                id: { $in: args.memberIds }
+              }
+            })
+            .then((members) => {
+              return members.map((member) => {
+                return member.createMessage({
+                    messageText: args.messageText,
+                    timeToPost: args.timeToPost,
+                    senderTag: args.senderTag
+                  });
+              });
+
+            });
+        }
+      },
+			deleteMessages: {
 				type: Message,
 				args: {
-					id: {type: new GraphQLNonNull(GraphQLInt)}
+					ids: {type: new GraphQLNonNull(GraphQLInt)}
 				},
 				resolve(_, args){
 					return db.models.message.destroy({
-						where: {id: args.id}
+						where: {
+              id: {
+                $in: args.ids
+              }
+            }
 					});
 				}
 			},
