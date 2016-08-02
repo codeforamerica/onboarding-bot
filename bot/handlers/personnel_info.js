@@ -1,6 +1,6 @@
-var natural = require('natural');
+let natural = require('natural');
 
 module.exports = function(text) {
-  var person = text.match(/\<\@[a-z0-9]+\>/gim);
+  let person = text.match(/\<\@[a-z0-9]+\>/gim);
   return 'Hey, ' + person + ' is an employee at 💻🇺🇸';
 }

@@ -40,7 +40,7 @@ Conn.sync({force: true})
       let message_text = 'Hey, you, <@U02S61FF2>, and <@U039XHJAA> are starting the Wayne county police dashboard project soon, time 4 a kick-off potluck 🍲🍰';
       let time = '2016-07-19 09:30:50';
 
-      for (var i = 1; i <= tags.length; i++) {
+      for (let i = 1; i <= tags.length; i++) {
         if (tags[i] == undefined) continue;
 
         let tag = tags[i];

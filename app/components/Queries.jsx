@@ -11,7 +11,7 @@ export default class Queries extends Component {
   }
   componentDidMount() {
     $.getJSON("/gimme/" + this.props.item, function(data) {
-      var items = [];
+      let items = [];
       $.each(data, function( key, val ) {
         items.push(val);
       });
@@ -31,7 +31,7 @@ export default class Queries extends Component {
     this.setState({ forms: newState });
   }
   render() {
-    var endpoint = `take/${this.props.item}`;
+    let endpoint = `take/${this.props.item}`;
     return <div>
       <form action={endpoint} method="POST">
         <table className="table table-responsive table-hover">

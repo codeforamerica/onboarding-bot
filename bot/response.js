@@ -1,19 +1,19 @@
-var natural = require('natural');
-var member_start = require('./handlers/member_start');
-var member_info = require('./handlers/member_info');
-var member_edit = require('./handlers/member_edit');
-var resources_info = require('./handlers/resources_info');
-var personnel_info = require('./handlers/personnel_info');
-var quiet_mode = require('./handlers/quiet_mode');
+let natural = require('natural');
+let member_start = require('./handlers/member_start');
+let member_info = require('./handlers/member_info');
+let member_edit = require('./handlers/member_edit');
+let resources_info = require('./handlers/resources_info');
+let personnel_info = require('./handlers/personnel_info');
+let quiet_mode = require('./handlers/quiet_mode');
 
 // Text to train Bayesian classifier on
-var training = require('./training.json');
-var classifier = new natural.BayesClassifier();
+let training = require('./training.json');
+let classifier = new natural.BayesClassifier();
 
 // For all the categories specified in training.json,
 // we train the classifier on these sample text.
 // e.g. classifier.addDocument('lets get @chris onboarded.', 'member_start');
-for (var key in training) {
+for (let key in training) {
   training[key].forEach(function(text) {
     classifier.addDocument(text, key);
   });
@@ -22,7 +22,7 @@ classifier.train();
 
 // Export logic
 module.exports = function(text, client, bot, message) {
-  var category = classifier.classify(text);
+  let category = classifier.classify(text);
   switch (category) {
     case 'member_start':
       member_start(text, client, bot, message);

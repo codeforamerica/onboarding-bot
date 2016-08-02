@@ -4,9 +4,9 @@ const moment = require('moment');
 const querystring = require('querystring');
 
 module.exports = function(text, client, bot, message) {
-  var date = chrono.parseDate(text);
-  var timeFromNow = moment(date).fromNow();
-  var person = text.match(/\<\@[a-z0-9]+\>/gim);
+  let date = chrono.parseDate(text);
+  let timeFromNow = moment(date).fromNow();
+  let person = text.match(/\<\@[a-z0-9]+\>/gim);
 
   // TODO: Query Slack user.info API to get deets about ${person} prior to registering them in DB
 
