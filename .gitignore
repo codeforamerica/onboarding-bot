@@ -38,3 +38,8 @@ jspm_packages
 
 # Ignore config
 config.json
+
+# Vim stuff
+*~
+*.swp
+*.swo
