@@ -12,10 +12,11 @@ mutation {
     id
   }
 }
-`
+`;
 
 module.exports = function(text) {
   return graphql(schema, query).then((result) => {
+    debugger;
     return `Ok, I\'ved updated my database. Here is the result ${result}! 💻🇺🇸`;
   });
 }
