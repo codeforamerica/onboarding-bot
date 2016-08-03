@@ -4,6 +4,7 @@
   "description": "Brief new employees about onboarding activities via Slack",
   "main": "bot/bot.js",
   "scripts": {
+	"debug": "env DEV=true babel-node-debug bot/index.js",
     "start": "env DEV=false node bot/index.js",
     "start:dev": "env DEV=true node bot/index.js",
     "setupdb": "createdb onboarding && psql -d onboarding -f scaffold.sql",
