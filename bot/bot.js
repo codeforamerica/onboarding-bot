@@ -20,7 +20,9 @@ let connectionString = process.env.DEV ? config.settings.dev.db : config.setting
 
 // Our configuration and initialization for botkit
 let setup = process.env.DEV ? config.settings.dev : config.settings.prod;
+console.log('******** CONFIG', JSON.stringify(setup, null, '\t'));
 let controller = Botkit.slackbot(setup);
+debugger;
 let authentication = process.env.DEV ? config.authentication_dev : config.authentication_prod;
 controller.spawn(authentication).startRTM();
 
