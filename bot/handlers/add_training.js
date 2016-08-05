@@ -3,16 +3,18 @@ let chrono = require('chrono-node');
 import schema from '../graphql/schema';
 import { graphql } from 'graphql';
 
-const query = `
-mutation {
-  createTraining(
-    trainingCategory: "member_start",
-    trainingText: "They will start soon!"
-  ) {
-    id
+let query = (category, trainingText) => {
+  return `
+  mutation {
+    createTraining(
+      trainingCategory: "${category}",
+      trainingText: "${trainingText}"
+    ) {
+      id
+    }
   }
-}
-`;
+  `;
+};
 
 module.exports = function(text, client, bot, message) {
     bot.startConversation(message, function(err, convo) {
@@ -25,6 +27,7 @@ module.exports = function(text, client, bot, message) {
               {
                   pattern: "yes",
                   callback(reply, convo) {
+                      console.log(`****** CALLBACK RAN`);
                       convo.ask(
                         `
                           What category do you want to put this new phrase you are about to teach me?\n
@@ -40,21 +43,24 @@ module.exports = function(text, client, bot, message) {
                           {
                               default: true,
                               callback(reply, convo) {
+                                // reply.text here is the category
+                                let category = reply.text;
                                 convo.ask(
                                   `
-                                    Ok, type out the training text associated with the category\n
-                                    ${process.env.DEV ? JSON.stringify(reply, null, '\t') : ""}
+                                    Ok, type out the training text associated with the category: (I'll wait)
                                   `,
                                   [
                                     {
                                       default: true,
                                       callback(reply, convo) {
-                                        convo.say(`I've will try and add '${reply}' to my database.`);
-                                        graphql(schema, query)
+                                        // reply.text here is the training text
+                                        let trainingText = reply.text;
+                                        convo.say(`I've will try and add that to my database.`);
+                                        graphql(schema, query(category, trainingText))
                                           .then((result) => {
                                             convo.say(
                                               `I did it! Here is the result:\n
-                                              ${process.env.DEV ? JSON.stringify(reply, null, '\t') : ""}
+                                              ${process.env.DEV ? JSON.stringify(`**** GRAPHQL ${result}`, null, '\t') : ""}
                                               `
                                             );
                                             convo.next();
@@ -68,24 +74,29 @@ module.exports = function(text, client, bot, message) {
                                             );
                                             convo.next();
                                           });
+                                        convo.next();
                                       }
                                     }
                                   ]); // Training text response
+                                convo.next();
                               }
                           }
                         ]); // Category response
+                      convo.next();
                   }
               },
               {
                   pattern: "no",
                   callback(reply, convo) {
                     convo.say('Ok 🙂');
+                    convo.next();
                   }
               },
               {
                   default: true,
                   callback(reply, convo) {
                     convo.say('Didn\'t quite get that 😕');
+                    convo.next();
                   }
               }
           ]); // Confirmation response
