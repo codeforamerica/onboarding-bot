@@ -52,8 +52,7 @@ module.exports = function(text, client, bot, message) {
       break;
     default:
       return 'I did\'t understand that 😕. Here is some list of things I can do.';
-      // TODO: If bot doesn't understand a phrase,
-      // Ping moderators in CfA onboarding slack channel what they meant.
-      // Setup webhook
+      // List bot features
+      // Ping moderators in CfA onboarding slack channel
   }
 }
