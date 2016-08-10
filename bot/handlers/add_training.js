@@ -1,5 +1,5 @@
-let natural = require('natural');
-let chrono = require('chrono-node');
+import natural from 'natural';
+import chrono from 'chrono-node';
 import schema from '../graphql/schema';
 import { graphql } from 'graphql';
 
