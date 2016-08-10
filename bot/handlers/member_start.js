@@ -3,6 +3,7 @@ import chrono from 'chrono-node';
 import moment from 'moment';
 import querystring from 'querystring';
 import { graphql } from 'graphql';
+import schema from '../graphql/schema';
 
 let query = (memberTag, memberDescription, startDate, lastMessageId) => {
   return `
@@ -45,28 +46,52 @@ module.exports = function(text, client, bot, message) {
                                             .then((result) => {
                                                 convo.say(`
                                                     Done! \n
-                                                    ${process.env.DEV ? JSON.stringify(`**** GRAPHQL ${result}`, null, '\t') : ""}
+                                                    ${process.env.DEV ? JSON.stringify(result, null, '\t') : ""}
                                                 `);
                                                 convo.next();
                                             })
                                             .catch((error) => {
                                                 convo.say(`😧😓`);i
                                                 convo.say(`An error happened. Lets start over. 💐`);
-                                                convo.say(`${process.env.DEV ? JSON.stringify(`**** ERROR ${error}`, null, `\t`)}`);
+                                                convo.say(`
+                                                    ${process.env.DEV ? JSON.stringify(error, null, '\t') : "" }
+                                                `);
                                                 convo.next();
                                             });
                                         convo.next();
                                     }
                                 },
                                 {
-                                    pattern: 'no',
+                                    default: true,
                                     callback(reply, convo) {
+                                        let person = reply.text.match(/\<\@[a-z0-9]+\>/gim);
+                                        let date = chrono.parseDate(reply.text);
                                         convo.ask(
                                             `Did you want to add ${person}, who starts on ${date}?`,
                                             [
                                                 {
-                                                    pattern: 'yes'
-                                                },
+                                                    pattern: 'yes',
+                                                    callback(reply, convo) {
+                                                        convo.say('Ok I\'m going to try to add that to my database! Give me a sec ...');
+                                                        graphql(schema, query(person, 'New member!', date, undefined))
+                                                            .then((result) => {
+                                                                convo.say(`
+                                                                    Done! \n
+                                                                    ${process.env.DEV ? JSON.stringify(result, null, '\t') : ""}
+                                                                `);
+                                                                convo.next();
+                                                            })
+                                                            .catch((error) => {
+                                                                convo.say(`😧😓`);i
+                                                                convo.say(`An error happened. Lets start over. 💐`);
+                                                                convo.say(`
+                                                                    ${process.env.DEV ? JSON.stringify(error, null, '\t') : "" }
+                                                                `);
+                                                                convo.next();
+                                                            });
+                                                        convo.next();
+                                                    }
+                                                }
                                             ]
                                         );
                                         convo.next();
