@@ -27,12 +27,14 @@ const Mutation = new GraphQLObjectType({
 				type: Member,
 				args: {
 					memberTag: { type: new GraphQLNonNull(GraphQLString) },
-					memberDescription: { type: new GraphQLNonNull(GraphQLString) }
+					memberDescription: { type: new GraphQLNonNull(GraphQLString) },
+          startDate: { type: GraphQLString }
 				},
 				resolve(_, args) {
 					return db.models.member.create({
 						memberTag: args.memberTag,
-						memberDescription: args.memberDescription
+						memberDescription: args.memberDescription,
+            startDate: args.startDate
 					});
 				}
 			},
@@ -193,10 +195,10 @@ const Mutation = new GraphQLObjectType({
 			updateResource: {
 				type: Resource,
 				args: {
-          resourceTitle: { type: new GraphQLNonNull(GraphQLFloat) },
+				    resourceTitle: { type: new GraphQLNonNull(GraphQLFloat) },
 					resourceKeywords: { type: new GraphQLNonNull(GraphQLString) },
 					resourceLink: { type: new GraphQLNonNull(GraphQLString) },
-          id: { type: new GraphQLNonNull(GraphQLInt) }
+                    id: { type: new GraphQLNonNull(GraphQLInt) }
 				},
 				resolve(_, args){
 					return db.models.resource.update({
@@ -235,9 +237,9 @@ const Mutation = new GraphQLObjectType({
 			updateTraining: {
 				type: Training,
 				args: {
-          trainingCategory: { type: new GraphQLNonNull(GraphQLFloat) },
-					trainingText: { type: new GraphQLNonNull(GraphQLString) },
-          id: { type: new GraphQLNonNull(GraphQLInt) }
+                    trainingCategory: { type: new GraphQLNonNull(GraphQLFloat) },
+					          trainingText: { type: new GraphQLNonNull(GraphQLString) },
+                    id: { type: new GraphQLNonNull(GraphQLInt) }
 				},
 				resolve(_, args){
 					return db.models.training.update({

@@ -11,8 +11,7 @@ let query = (memberTag, memberDescription, startDate, lastMessageId) => {
         createMember(
             memberTag: "${memberTag}",
             memberDescription: "${memberDescription}",
-            startDate: "${startDate}",
-            lastMessageId: "${lastMessageId}"
+            startDate: "${startDate}"
         ) {
             id
         }
@@ -36,28 +35,12 @@ module.exports = function(text, client, bot, message) {
                     callback(reply, convo) {
                         let person = text.match(/\<\@[a-z0-9]+\>/gim);
                         convo.ask(
-                            `Did you want to add ${person}, who starts on ${date}? If not tell me who you want to add and what's their start date.`,
+                            `Please tell me the person you want to add and when they start`,
                             [
                                 {
-                                    pattern: 'yes',
+                                    pattern: 'nevermind',
                                     callback(reply, convo) {
-                                        convo.say('Ok I\'m going to try to add that to my database! Give me a sec ...');
-                                        graphql(schema, query(person, 'New member!', date, undefined))
-                                            .then((result) => {
-                                                convo.say(`
-                                                    Done! \n
-                                                    ${process.env.DEV ? JSON.stringify(result, null, '\t') : ""}
-                                                `);
-                                                convo.next();
-                                            })
-                                            .catch((error) => {
-                                                convo.say(`😧😓`);i
-                                                convo.say(`An error happened. Lets start over. 💐`);
-                                                convo.say(`
-                                                    ${process.env.DEV ? JSON.stringify(error, null, '\t') : "" }
-                                                `);
-                                                convo.next();
-                                            });
+                                        convo.say('Nevermind? Ok I\'ll forget about it ...');
                                         convo.next();
                                     }
                                 },
@@ -72,8 +55,12 @@ module.exports = function(text, client, bot, message) {
                                                 {
                                                     pattern: 'yes',
                                                     callback(reply, convo) {
-                                                        convo.say('Ok I\'m going to try to add that to my database! Give me a sec ...');
-                                                        graphql(schema, query(person, 'New member!', date, undefined))
+                                                        convo.say('Ok I\'m going to try to add them to my database! Give me a sec ...');
+
+                                                        // Here I pull self-description information via Slack API
+
+                                                        graphql(schema, query(person, 'New member!', date))
+                                                            // When graphql query returns result
                                                             .then((result) => {
                                                                 convo.say(`
                                                                     Done! \n
@@ -81,6 +68,7 @@ module.exports = function(text, client, bot, message) {
                                                                 `);
                                                                 convo.next();
                                                             })
+                                                            // When graphql query returns error
                                                             .catch((error) => {
                                                                 convo.say(`😧😓`);i
                                                                 convo.say(`An error happened. Lets start over. 💐`);
